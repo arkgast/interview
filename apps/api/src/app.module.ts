@@ -1,12 +1,13 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { EnvironmentConfigModule } from './environment-config/environment-config.module';
 import { MysqlConfigService } from './environment-config/mysql-config.service';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    EnvironmentConfigModule,
+    UserModule,
     TypeOrmModule.forRootAsync({
       imports: [EnvironmentConfigModule],
       useFactory: (mySsqlConfigService: MysqlConfigService) =>

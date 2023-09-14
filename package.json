@@ -11,7 +11,7 @@
     "@nestjs/platform-express": "^10.0.2",
     "@nestjs/typeorm": "^10.0.0",
     "@swc/helpers": "~0.5.0",
-    "axios": "^1.0.0",
+    "axios": "^1.5.0",
     "mysql2": "^3.6.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
