@@ -1,26 +1,23 @@
 import { useEffect, useState } from 'react';
-import { CreateTodo, Todo } from './types';
+import { CreateTodo } from './CreateTodo';
+import { ListTodo } from './ListTodo';
 import {
-  getTodoList,
   createTodo,
-  updateTodoStatus,
   deleteTodo,
+  getTodoList,
+  updateTodoStatus,
 } from './service';
+import { Todo, TodoInput } from './types';
 
-const emptyTodo: CreateTodo = {
+const emptyTodo: TodoInput = {
   title: '',
   status: false,
 };
 
-enum TodoStatus {
-  PENDING = 0,
-  COMPLETED = 1,
-}
-
 export function App() {
+  const [todo, setTodo] = useState<TodoInput>(emptyTodo);
   const [todoList, setTodoList] = useState<Todo[]>([]);
   const [filteredTodoList, setFilteredTodoList] = useState<Todo[]>([]);
-  const [todo, setTodo] = useState<CreateTodo>(emptyTodo);
 
   useEffect(() => {
     getTodoList().then((todos) => {
@@ -88,74 +85,20 @@ export function App() {
       <h1>Tasks ({filteredTodoList.length})</h1>
 
       <div className="mb-3">
-        <form onSubmit={handleSubmit} className="row g-3">
-          <div className="col-auto">
-            <input
-              type="text"
-              name="title"
-              value={todo.title}
-              onChange={handleInputChange}
-              className="form-control"
-            />
-          </div>
-          <div className="col-auto">
-            <button type="submit" className="btn btn-primary">
-              Save
-            </button>
-          </div>
-          <div className="col-auto">
-            <select
-              name="statusFiltering"
-              className="form-select"
-              onChange={handleStatusFilter}
-            >
-              <option defaultValue="" value="">
-                Filter by status
-              </option>
-              <option value={TodoStatus.PENDING}>Pending</option>
-              <option value={TodoStatus.COMPLETED}>Completed</option>
-              <option value="">All</option>
-            </select>
-          </div>
-        </form>
+        <CreateTodo
+          todo={todo}
+          handleSubmit={handleSubmit}
+          handleInputChange={handleInputChange}
+          handleStatusFilter={handleStatusFilter}
+        />
       </div>
+
       <div>
-        {filteredTodoList.length === 0 && (
-          <div className="alert alert-info" role="alert">
-            No tasks found
-          </div>
-        )}
-        <ul className="list-group">
-          {filteredTodoList.map((todo) => {
-            console.log(todo.status);
-            return (
-              <div
-                key={todo.id}
-                className="d-flex justify-content-between align-items-center mb-2"
-              >
-                <li
-                  className="list-group-item cursor-hand w-100"
-                  onClick={() => handleUpdateTodo(todo.id, todo.status)}
-                >
-                  <span
-                    className={
-                      todo.status ? 'text-decoration-line-through' : ''
-                    }
-                  >
-                    {todo.title}
-                  </span>
-                </li>
-                <button
-                  type="button"
-                  onClick={() => handleDeleteTodo(todo.id)}
-                  className="rounded-end btn btn-danger rounded-0 py-2"
-                >
-                  X
-                </button>
-              </div>
-            );
-          })}
-        </ul>
+        <ListTodo
+          filteredTodoList={filteredTodoList}
+          handleDeleteTodo={handleDeleteTodo}
+          handleUpdateTodo={handleUpdateTodo}
+        />
       </div>
     </div>
   );
