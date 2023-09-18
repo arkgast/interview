@@ -55,11 +55,11 @@ export function App() {
     });
   };
 
-  const handleUpdateTodo = (todoId: string, status: boolean) => {
-    updateTodoStatus(todoId, !todo.status).then(() => {
+  const handleUpdateTodo = (todoId: string, todoStatus: boolean) => {
+    updateTodoStatus(todoId, !todoStatus).then(() => {
       const updatedTodoList = todoList.map((todo) => {
         if (todo.id === todoId) {
-          return { ...todo, status: !status };
+          return { ...todo, status: !todoStatus };
         }
         return todo;
       });
@@ -71,7 +71,6 @@ export function App() {
 
   const handleStatusFilter = (event: React.FormEvent<HTMLSelectElement>) => {
     const { value } = event.currentTarget;
-    console.log(value);
     setFilteredTodoList(
       todoList.filter((todo) => {
         if (value === '') {
@@ -128,6 +127,7 @@ export function App() {
         )}
         <ul className="list-group">
           {filteredTodoList.map((todo) => {
+            console.log(todo.status);
             return (
               <div
                 key={todo.id}

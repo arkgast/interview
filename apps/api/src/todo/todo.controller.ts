@@ -9,28 +9,32 @@ import {
 } from '@nestjs/common';
 import { CreateTodoDto } from './dtos/create-todo.dto';
 import { TodoService } from './todo.service';
+import { Todo } from './entity/Todo.entity';
 
 @Controller('todo')
 export class TodoController {
   constructor(private readonly todoService: TodoService) {}
 
   @Get()
-  getTodoList() {
+  getTodoList(): Promise<Todo[]> {
     return this.todoService.getTodoList();
   }
 
   @Post()
-  createTodo(@Body() createTodoDto: CreateTodoDto) {
+  createTodo(@Body() createTodoDto: CreateTodoDto): Promise<Todo> {
     return this.todoService.createTodo(createTodoDto);
   }
 
   @Put(':id')
-  updateTodo(@Param('id') id: string, @Body('status') status: boolean) {
-    return this.todoService.updateTodo(id, status);
+  async updateTodo(
+    @Param('id') id: string,
+    @Body('status') status: boolean
+  ): Promise<void> {
+    await this.todoService.updateTodo(id, status);
   }
 
   @Delete(':id')
-  deleteTodo(@Param('id') id: string) {
-    return this.todoService.deleteTodo(id);
+  async deleteTodo(@Param('id') id: string): Promise<void> {
+    await this.todoService.deleteTodo(id);
   }
 }

@@ -22,11 +22,11 @@ export class TodoService {
     return this.todoRepository.save(todo);
   }
 
-  deleteTodo(id: string) {
-    return this.todoRepository.update(id, { deleted: true });
-  }
-
   updateTodo(id: string, status: boolean) {
     return this.todoRepository.update(id, { status });
+  }
+
+  deleteTodo(id: string) {
+    return this.todoRepository.update(id, { deleted: true });
   }
 }
