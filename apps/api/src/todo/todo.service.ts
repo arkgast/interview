@@ -15,6 +15,9 @@ export class TodoService {
       where: {
         deleted: false,
       },
+      order: {
+        id: 'DESC',
+      },
     });
   }
 

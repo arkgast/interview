@@ -1,8 +1,18 @@
-import { ListTodoProps } from './types';
-import { deleteTodo, updateTodoStatus } from './service';
+import { useEffect } from 'react';
+import { ListTodoProps } from '../types';
+import { getTodoList, deleteTodo, updateTodoStatus } from '../services';
 
 export function ListTodo(props: ListTodoProps) {
   const { filteredTodoList, todoList, updateTodoLists } = props;
+
+  useEffect(() => {
+    const fetchTodoList = async () => {
+      const todos = await getTodoList();
+      updateTodoLists(todos);
+    };
+
+    fetchTodoList();
+  }, [updateTodoLists]);
 
   const handleDeleteTodo = async (id: string) => {
     await deleteTodo(id);

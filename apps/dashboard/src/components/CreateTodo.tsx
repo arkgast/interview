@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { createTodo } from './service';
-import { CreateTodoProps, TodoInput, TodoStatus } from './types';
+import { createTodo } from '../services';
+import { CreateTodoProps, TodoInput, TodoStatus } from '../types';
 
 const INITIAL_TODO: TodoInput = {
   title: '',

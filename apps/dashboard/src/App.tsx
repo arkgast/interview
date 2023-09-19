@@ -1,19 +1,11 @@
-import { useEffect, useState } from 'react';
-import { CreateTodo } from './CreateTodo';
-import { ListTodo } from './ListTodo';
-import { getTodoList } from './service';
+import { useState } from 'react';
+import { CreateTodo } from './components/CreateTodo';
+import { ListTodo } from './components/ListTodo';
 import { Todo } from './types';
 
 export function App() {
   const [todoList, setTodoList] = useState<Todo[]>([]);
   const [filteredTodoList, setFilteredTodoList] = useState<Todo[]>([]);
-
-  useEffect(() => {
-    getTodoList().then((todos) => {
-      setTodoList(todos);
-      setFilteredTodoList(todos);
-    });
-  }, []);
 
   const updateTodoLists = (todos: Todo[]) => {
     setTodoList(todos);
