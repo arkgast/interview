@@ -1,13 +1,29 @@
 # Interview
 
-## Nest.js
+Basic TODO App
 
-https://nx.dev/packages/nest
+## Run
 
-```
-$ yarn add -D @nx/nest
+**Install dependencies**
 
-$ nx g @nx/nest:app <app-name>
+  $ yarn
 
-$ nx g @nx/nest:app <app-name> --frontendProject my-angular-app
-```
+**Start mysql container**
+
+  $ docker compose up
+
+**Copy .env-example into .env**
+
+  $ cp ./apps/api/.env-example ./apps/api/.env
+
+**Start api**
+
+  $ nx serve api
+
+> Nest.js api server will run on port 3000
+
+**Start dashboard**
+
+  $ nx serve dashboard
+
+> React.js app will run on port 4200
