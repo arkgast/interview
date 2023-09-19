@@ -38,11 +38,13 @@ export function CreateTodo(props: CreateTodoProps) {
           value={todo.title}
           onChange={handleInputChange}
           className="form-control"
+          required
         />
       </div>
       <div className="col-auto">
         <button type="submit" className="btn btn-primary">
-          + Add
+          <i className="bi bi-plus"></i>
+          Add
         </button>
       </div>
       <div className="col-auto">
