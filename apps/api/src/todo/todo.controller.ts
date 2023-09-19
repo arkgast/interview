@@ -10,6 +10,7 @@ import {
 import { CreateTodoDto } from './dtos/create-todo.dto';
 import { TodoService } from './todo.service';
 import { Todo } from './entity/Todo.entity';
+import { UpdateTodoDto } from './dtos/update-todo.dto';
 
 @Controller('todo')
 export class TodoController {
@@ -28,9 +29,9 @@ export class TodoController {
   @Put(':id')
   async updateTodo(
     @Param('id') id: string,
-    @Body('status') status: boolean
+    @Body() updateTodoDto: UpdateTodoDto
   ): Promise<void> {
-    await this.todoService.updateTodo(id, status);
+    await this.todoService.updateTodo(id, updateTodoDto);
   }
 
   @Delete(':id')

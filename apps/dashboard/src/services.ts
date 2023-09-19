@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Todo, TodoInput } from './types';
+import { Todo, TodoInput, UpdateTodoInput } from './types';
 
 const API_URL = 'http://localhost:3000/api';
 
@@ -12,7 +12,6 @@ async function getTodoList(): Promise<Todo[]> {
     const { data } = await api.get<Todo[]>('/todo');
     return data;
   } catch (error) {
-    console.error(error);
     throw new Error(`Error while fetching todo list: ${error}`);
   }
 }
@@ -22,20 +21,17 @@ async function createTodo(todo: TodoInput): Promise<Todo> {
     const { data } = await api.post<Todo>('/todo', todo);
     return data;
   } catch (error) {
-    console.error(error);
     throw new Error(`Error while creating todo: ${error}`);
   }
 }
 
-async function updateTodoStatus(
+async function updateTodo(
   id: Todo['id'],
-  status: Todo['status']
-): Promise<Todo> {
+  updateTodo: UpdateTodoInput
+): Promise<void> {
   try {
-    const { data } = await api.put(`/todo/${id}`, { status });
-    return data;
+    await api.put(`/todo/${id}`, updateTodo);
   } catch (error) {
-    console.error(error);
     throw new Error(`Error while updating todo status: ${error}`);
   }
 }
@@ -44,9 +40,8 @@ async function deleteTodo(id: Todo['id']): Promise<void> {
   try {
     await api.delete(`/todo/${id}`);
   } catch (error) {
-    console.error(error);
     throw new Error(`Error while deleting todo: ${error}`);
   }
 }
 
-export { createTodo, deleteTodo, getTodoList, updateTodoStatus };
+export { createTodo, deleteTodo, getTodoList, updateTodo };

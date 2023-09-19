@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { deleteTodo, getTodoList, updateTodoStatus } from '../services';
-import { ListTodoProps } from '../types';
+import { deleteTodo, getTodoList, updateTodo } from '../services';
+import { ListTodoProps, TodoInput, UpdateTodoInput } from '../types';
 
 export function ListTodo(props: ListTodoProps) {
   const { filteredTodoList, todoList, updateTodoLists } = props;
@@ -20,13 +20,31 @@ export function ListTodo(props: ListTodoProps) {
     updateTodoLists(updatedTodos);
   };
 
-  const handleUpdateTodo = async (todoId: string, todoStatus: boolean) => {
-    await updateTodoStatus(todoId, !todoStatus);
-    const updatedTodoList = todoList.map((todo) => {
-      if (todo.id === todoId) {
-        return { ...todo, status: !todoStatus };
+  const handleUpdateTodoStatus = async (
+    todoId: string,
+    { status }: TodoInput
+  ) => {
+    await executeUpdateTodo(todoId, { status: !status });
+  };
+
+  const handleUpdateTodoTitle = async (
+    todoId: string,
+    { title }: TodoInput
+  ) => {
+    const newTitle = prompt('Update todo title', title);
+    if (title === newTitle || !newTitle) return;
+
+    await executeUpdateTodo(todoId, { title: newTitle || title });
+  };
+
+  const executeUpdateTodo = async (todoId: string, todo: UpdateTodoInput) => {
+    await updateTodo(todoId, todo);
+
+    const updatedTodoList = todoList.map((todoItem) => {
+      if (todoItem.id === todoId) {
+        return { ...todoItem, ...todo };
       }
-      return todo;
+      return todoItem;
     });
 
     updateTodoLists(updatedTodoList);
@@ -48,7 +66,7 @@ export function ListTodo(props: ListTodoProps) {
             >
               <li
                 className="list-group-item cursor-hand w-100"
-                onClick={() => handleUpdateTodo(todo.id, todo.status)}
+                onClick={() => handleUpdateTodoStatus(todo.id, todo)}
               >
                 <span
                   className={todo.status ? 'text-decoration-line-through' : ''}
@@ -56,13 +74,22 @@ export function ListTodo(props: ListTodoProps) {
                   {todo.title}
                 </span>
               </li>
-              <button
-                type="button"
-                onClick={() => handleDeleteTodo(todo.id)}
-                className="rounded-end btn btn-danger rounded-0 py-2"
-              >
-                X
-              </button>
+              <div className="btn-group">
+                <button
+                  type="button"
+                  className="btn btn-secondary rounded-0"
+                  onClick={() => handleUpdateTodoTitle(todo.id, todo)}
+                >
+                  <i className="bi bi-pencil-square"></i>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleDeleteTodo(todo.id)}
+                  className="btn btn-danger py-2"
+                >
+                  <i className="bi bi-trash"></i>
+                </button>
+              </div>
             </div>
           );
         })}

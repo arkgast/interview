@@ -7,6 +7,8 @@ export type Todo = {
 
 export type TodoInput = Omit<Todo, 'id'>;
 
+export type UpdateTodoInput = Partial<Todo>;
+
 export enum TodoStatus {
   PENDING = 0,
   COMPLETED = 1,
