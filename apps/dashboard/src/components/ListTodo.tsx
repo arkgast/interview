@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
+import { deleteTodo, getTodoList, updateTodoStatus } from '../services';
 import { ListTodoProps } from '../types';
-import { getTodoList, deleteTodo, updateTodoStatus } from '../services';
 
 export function ListTodo(props: ListTodoProps) {
   const { filteredTodoList, todoList, updateTodoLists } = props;

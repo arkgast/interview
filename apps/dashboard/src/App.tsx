@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { CreateTodo } from './components/CreateTodo';
 import { ListTodo } from './components/ListTodo';
 import { Todo } from './types';
@@ -7,10 +7,10 @@ export function App() {
   const [todoList, setTodoList] = useState<Todo[]>([]);
   const [filteredTodoList, setFilteredTodoList] = useState<Todo[]>([]);
 
-  const updateTodoLists = (todos: Todo[]) => {
+  const updateTodoLists = useCallback((todos: Todo[]) => {
     setTodoList(todos);
     setFilteredTodoList(todos);
-  };
+  }, []);
 
   const handleStatusFilter = (event: React.FormEvent<HTMLSelectElement>) => {
     const { value } = event.currentTarget;
