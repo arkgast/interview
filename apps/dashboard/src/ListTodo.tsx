@@ -1,7 +1,26 @@
 import { ListTodoProps } from './types';
+import { deleteTodo, updateTodoStatus } from './service';
 
 export function ListTodo(props: ListTodoProps) {
-  const { filteredTodoList, handleDeleteTodo, handleUpdateTodo } = props;
+  const { filteredTodoList, todoList, updateTodoLists } = props;
+
+  const handleDeleteTodo = async (id: string) => {
+    await deleteTodo(id);
+    const updatedTodos = todoList.filter((todo) => todo.id !== id);
+    updateTodoLists(updatedTodos);
+  };
+
+  const handleUpdateTodo = async (todoId: string, todoStatus: boolean) => {
+    await updateTodoStatus(todoId, !todoStatus);
+    const updatedTodoList = todoList.map((todo) => {
+      if (todo.id === todoId) {
+        return { ...todo, status: !todoStatus };
+      }
+      return todo;
+    });
+
+    updateTodoLists(updatedTodoList);
+  };
 
   return (
     <>
@@ -12,7 +31,6 @@ export function ListTodo(props: ListTodoProps) {
       )}
       <ul className="list-group">
         {filteredTodoList.map((todo) => {
-          console.log(todo.status);
           return (
             <div
               key={todo.id}

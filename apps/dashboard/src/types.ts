@@ -13,14 +13,13 @@ export enum TodoStatus {
 }
 
 export type CreateTodoProps = {
-  todo: TodoInput;
-  handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
-  handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  todoList: Todo[];
   handleStatusFilter: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  updateTodoLists: (todoList: Todo[]) => void;
 };
 
 export type ListTodoProps = {
+  todoList: Todo[];
   filteredTodoList: Todo[];
-  handleDeleteTodo: (id: string) => void;
-  handleUpdateTodo: (todoId: string, todoStatus: boolean) => void;
+  updateTodoLists: (todoList: Todo[]) => void;
 };

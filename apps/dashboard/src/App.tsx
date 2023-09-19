@@ -1,21 +1,10 @@
 import { useEffect, useState } from 'react';
 import { CreateTodo } from './CreateTodo';
 import { ListTodo } from './ListTodo';
-import {
-  createTodo,
-  deleteTodo,
-  getTodoList,
-  updateTodoStatus,
-} from './service';
-import { Todo, TodoInput } from './types';
-
-const INITIAL_TODO: TodoInput = {
-  title: '',
-  status: false,
-};
+import { getTodoList } from './service';
+import { Todo } from './types';
 
 export function App() {
-  const [todo, setTodo] = useState<TodoInput>(INITIAL_TODO);
   const [todoList, setTodoList] = useState<Todo[]>([]);
   const [filteredTodoList, setFilteredTodoList] = useState<Todo[]>([]);
 
@@ -25,44 +14,6 @@ export function App() {
       setFilteredTodoList(todos);
     });
   }, []);
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    const newTodo = await createTodo(todo);
-    const updatedTodos = [newTodo, ...todoList];
-
-    setTodo(INITIAL_TODO);
-    updateTodoLists(updatedTodos);
-  };
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setTodo({
-      ...todo,
-      [name]: value,
-    });
-  };
-
-  const handleDeleteTodo = (id: string) => {
-    deleteTodo(id).then(() => {
-      const updatedTodos = todoList.filter((todo) => todo.id !== id);
-      updateTodoLists(updatedTodos);
-    });
-  };
-
-  const handleUpdateTodo = (todoId: string, todoStatus: boolean) => {
-    updateTodoStatus(todoId, !todoStatus).then(() => {
-      const updatedTodoList = todoList.map((todo) => {
-        if (todo.id === todoId) {
-          return { ...todo, status: !todoStatus };
-        }
-        return todo;
-      });
-
-      updateTodoLists(updatedTodoList);
-    });
-  };
 
   const updateTodoLists = (todos: Todo[]) => {
     setTodoList(todos);
@@ -90,18 +41,17 @@ export function App() {
 
       <div className="mb-3">
         <CreateTodo
-          todo={todo}
-          handleSubmit={handleSubmit}
-          handleInputChange={handleInputChange}
+          todoList={todoList}
           handleStatusFilter={handleStatusFilter}
+          updateTodoLists={updateTodoLists}
         />
       </div>
 
       <div>
         <ListTodo
+          todoList={todoList}
           filteredTodoList={filteredTodoList}
-          handleDeleteTodo={handleDeleteTodo}
-          handleUpdateTodo={handleUpdateTodo}
+          updateTodoLists={updateTodoLists}
         />
       </div>
     </div>
