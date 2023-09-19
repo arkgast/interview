@@ -9,13 +9,13 @@ import {
 } from './service';
 import { Todo, TodoInput } from './types';
 
-const emptyTodo: TodoInput = {
+const INITIAL_TODO: TodoInput = {
   title: '',
   status: false,
 };
 
 export function App() {
-  const [todo, setTodo] = useState<TodoInput>(emptyTodo);
+  const [todo, setTodo] = useState<TodoInput>(INITIAL_TODO);
   const [todoList, setTodoList] = useState<Todo[]>([]);
   const [filteredTodoList, setFilteredTodoList] = useState<Todo[]>([]);
 
@@ -26,14 +26,14 @@ export function App() {
     });
   }, []);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    createTodo(todo).then((todo) => {
-      setTodo(emptyTodo);
-      setTodoList([...todoList, todo]);
-      setFilteredTodoList([...todoList, todo]);
-    });
+    const newTodo = await createTodo(todo);
+    const updatedTodos = [newTodo, ...todoList];
+
+    setTodo(INITIAL_TODO);
+    updateTodoLists(updatedTodos);
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,9 +46,8 @@ export function App() {
 
   const handleDeleteTodo = (id: string) => {
     deleteTodo(id).then(() => {
-      const updatedTodoList = todoList.filter((todo) => todo.id !== id);
-      setTodoList(updatedTodoList);
-      setFilteredTodoList(updatedTodoList);
+      const updatedTodos = todoList.filter((todo) => todo.id !== id);
+      updateTodoLists(updatedTodos);
     });
   };
 
@@ -61,23 +60,28 @@ export function App() {
         return todo;
       });
 
-      setTodoList(updatedTodoList);
-      setFilteredTodoList(updatedTodoList);
+      updateTodoLists(updatedTodoList);
     });
+  };
+
+  const updateTodoLists = (todos: Todo[]) => {
+    setTodoList(todos);
+    setFilteredTodoList(todos);
   };
 
   const handleStatusFilter = (event: React.FormEvent<HTMLSelectElement>) => {
     const { value } = event.currentTarget;
-    setFilteredTodoList(
-      todoList.filter((todo) => {
-        if (value === '') {
-          return true;
-        }
+    filterByTodoStatus(value);
+  };
 
-        const filterdStatus = parseInt(value, 10);
-        return todo.status === Boolean(filterdStatus);
-      })
+  const filterByTodoStatus = (value: string) => {
+    const isAll = value === '';
+    const filterdStatus = parseInt(value, 10);
+
+    const filteredTodos = todoList.filter(
+      (todo) => isAll || todo.status === Boolean(filterdStatus)
     );
+    setFilteredTodoList(filteredTodos);
   };
 
   return (

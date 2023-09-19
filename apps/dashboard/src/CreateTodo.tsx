@@ -15,7 +15,7 @@ export function CreateTodo(props: CreateTodoProps) {
       </div>
       <div className="col-auto">
         <button type="submit" className="btn btn-primary">
-          Save
+          + Add
         </button>
       </div>
       <div className="col-auto">

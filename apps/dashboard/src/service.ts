@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Todo, CreateTodo } from './types';
+import { Todo, TodoInput } from './types';
 
 const API_URL = 'http://localhost:3000/api';
 
@@ -17,7 +17,7 @@ async function getTodoList(): Promise<Todo[]> {
   }
 }
 
-async function createTodo(todo: CreateTodo): Promise<Todo> {
+async function createTodo(todo: TodoInput): Promise<Todo> {
   try {
     const { data } = await api.post<Todo>('/todo', todo);
     return data;
@@ -49,4 +49,4 @@ async function deleteTodo(id: Todo['id']): Promise<void> {
   }
 }
 
-export { getTodoList, createTodo, updateTodoStatus, deleteTodo };
+export { createTodo, deleteTodo, getTodoList, updateTodoStatus };
